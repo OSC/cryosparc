@@ -38,7 +38,7 @@ WORKER_HOME=${script_home}/worker
 mkdir -p $WORKER_HOME
 
 _header "Preparing CryoSPARC worker $VERSION"
-#curl -L https://get.cryosparc.com/download/worker-v$VERSION/$LICENSE_ID -o /tmp/cryosparc_worker.tar.gz
+curl -L https://get.cryosparc.com/download/worker-v$VERSION/$LICENSE_ID -o /tmp/cryosparc_worker.tar.gz
 tar -xf /tmp/cryosparc_worker.tar.gz --strip=1 -C $WORKER_HOME
 
 _header "Installing CryoSPARC worker $VERSION"
