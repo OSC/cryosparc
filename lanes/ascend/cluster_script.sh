@@ -22,20 +22,20 @@
 ##
 ## What follows is a simple SLURM script:
 
-#SBATCH --cluster=ascend
-#SBATCH --account=
+#SBATCH --account={{ account }}
 #SBATCH --job-name=cryosparc_{{ project_uid }}_{{ job_uid }}
 #SBATCH --chdir={{ project_dir_abs }}
-#SBATCH --time={{ (time_value|default(60)) }}
+#SBATCH --time={{ (time|default(60)) }}
 #SBATCH --output={{ job_dir_abs }}/output.txt
 #SBATCH --error={{ job_dir_abs }}/error.txt
 #SBATCH --export=ALL,LD_PRELOAD=
 #SBATCH --nodes=1
-#SBATCH --ntasks-per-node={{ (ntasks_value|default(1)) }}  
+#SBATCH --cpus-per-task={{ num_cpu }}
+#SBATCH --ntasks-per-node={{ (ntasks_per_node|default(1)) }}
 {%- if num_gpu == 0 %}
 {%- else %}
 #SBATCH --gpus-per-node={{ num_gpu }}
 {%- endif %}
 
-export CRYOSPARC_SSD_PATH="${TMPDIR}"
+export CRYOSPARC_SSD_PATH="$TMPDIR"
 {{ run_cmd }}

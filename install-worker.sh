@@ -15,7 +15,6 @@ cat <<EOF
 
  Usage: 
 
- 
  VERSION=4.7.1
  LICENSE_ID=xxxx-xxxx-xxxxx
  ./install-worker.sh \$VERSION \$LICENSE_ID
