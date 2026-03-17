@@ -40,7 +40,7 @@ _header "Preparing CryoSPARC worker $VERSION"
 curl -L https://get.cryosparc.com/download/worker-v$VERSION/$LICENSE_ID -o /tmp/cryosparc_worker.tar.gz
 tar -xf /tmp/cryosparc_worker.tar.gz --strip=1 -C $WORKER_HOME
 
-_header "Installing CryoSPARC worker $VERSION"
+_header "Installing CryoSPARC worker $VERSION to $WORKER_HOME"
 cd $WORKER_HOME
 ./install.sh --license $LICENSE_ID
 
