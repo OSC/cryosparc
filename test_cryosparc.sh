@@ -37,7 +37,7 @@ echo "User ID is: $user_id"
 
 project_container_dir=$2
 mkdir -p ${project_container_dir}
-project_title='Test Workers'
+project_title="Test Workers"
 project_uid=$(cryosparcm cli "create_empty_project(owner_user_id='$user_id', project_container_dir='$project_container_dir', title='$project_title')")
 echo "Created project with UID: $project_uid"
 
