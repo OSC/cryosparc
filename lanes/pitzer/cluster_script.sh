@@ -31,7 +31,7 @@
 
 #### What follows is a simple SLURM script:
 #!/bin/bash
-#SBATCH --cluster=ascend
+#SBATCH --cluster=pitzer
 #SBATCH --account={{ account }}
 #SBATCH --job-name=cryosparc_{{ project_uid }}_{{ job_uid }}
 #SBATCH --chdir={{ project_dir_abs }}
