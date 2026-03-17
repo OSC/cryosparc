@@ -33,7 +33,7 @@ if [[ -z "$LICENSE_ID" ]] || [[ -z "$VERSION" ]]; then
 fi
 
 script_home="`dirname $(readlink -f $0)`"
-WORKER_HOME=${script_home}/worker
+WORKER_HOME=${script_home}/workers/$VERSION
 mkdir -p $WORKER_HOME
 
 _header "Preparing CryoSPARC worker $VERSION"
