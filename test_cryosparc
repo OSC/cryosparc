@@ -10,7 +10,7 @@ cat <<EOF
 
  Usage: 
 
- ./test-cryosparc.sh <email> <project_dir>
+ ./test-cryosparc.sh <email> <project_dir> <cluster>
 
 EOF
 
@@ -21,8 +21,9 @@ exit -1
 
 EMAIL=$1
 PROJECT_DIR=$2
+CLUSTER=$3
 
-if [[ -z "$EMAIL" ]] || [[ -z "$PROJECT_DIR" ]]; then
+if [[ -z "$EMAIL" ]] || [[ -z "$PROJECT_DIR" ]] || [[ -z "$CLUSTER" ]] ; then
   _help	
 fi
 
@@ -30,16 +31,16 @@ fi
 _header "Test checklist"
 cryosparcm test install
 
-_header "Create a project"
+_header "Create a project for $CLUSTER testing"
 email_address=$1
 user_id=$(cryosparcm cli "get_id_by_email('$email_address')")
 echo "User ID is: $user_id"
 
 project_container_dir=$2
 mkdir -p ${project_container_dir}
-project_title="Test Workers"
+project_title="Test workers on $CLUSTER"
 project_uid=$(cryosparcm cli "create_empty_project(owner_user_id='$user_id', project_container_dir='$project_container_dir', title='$project_title')")
 echo "Created project with UID: $project_uid"
 
 _header "Test workers"
-cryosparcm test workers $project_uid
+cryosparcm test workers $project_uid --target $CLUSTER
