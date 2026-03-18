@@ -41,8 +41,10 @@
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task={{ num_cpu }}
 #SBATCH --ntasks-per-node={{ (ntasks_per_node|default(1)) }}
-{%- if num_gpu == 0 %}
-{%- else %}
+{%- if ram_gb > 0 %}
+#SBATCH --mem={{ ram_gb }}gb
+{%- endif %}
+{%- if num_gpu > 0 %}
 #SBATCH --gpus-per-node={{ num_gpu }}
 {%- endif %}
 
