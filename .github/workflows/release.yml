@@ -3,6 +3,7 @@ on:
   push:
     tags:
       - 'v*' # Triggers only when a tag like v1.0.0 is pushed 
+      - 'latest'
 permissions:
   contents: write
 jobs:
