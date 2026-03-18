@@ -24,13 +24,12 @@
 #### CryoSPARC cluster submission script variables
 ## {{ time }}               - time limit of the job (default: 60 minutes)
 ## {{ ntasks_per_node }}    - number of tasks per node (default: 1 task)
-                              Note: leave this value as default unless the
-                              number of CPUs is insufficient or you need more
-                              memory to complete the job. Increasing this value
-                              will allocate more resources per job.
+##                            Note: leave this value as default unless the
+##                            number of CPUs is insufficient or you need more
+##                            memory to complete the job. Increasing this value
+##                            will allocate more resources per job.
 
 #### What follows is a simple SLURM script:
-#!/bin/bash
 #SBATCH --cluster=pitzer
 #SBATCH --account={{ account }}
 #SBATCH --job-name=cryosparc_{{ project_uid }}_{{ job_uid }}
