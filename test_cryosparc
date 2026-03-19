@@ -18,29 +18,38 @@ exit -1
 
 }
 
+get_project_id() {
+ cryosparcm cli "list_projects()" |\
+ python3 -c "import sys, ast; [print(p['uid']) for p in ast.literal_eval(sys.stdin.read()) if 'OSC test workers' in p.get('title', '')]" |\
+ head -n 1
+}
 
 EMAIL=$1
 PROJECT_DIR=$2
 CLUSTER=$3
 
 if [[ -z "$EMAIL" ]] || [[ -z "$PROJECT_DIR" ]] || [[ -z "$CLUSTER" ]] ; then
-  _help	
+  _help
 fi
-
 
 _header "Test checklist"
 cryosparcm test install
 
-_header "Create a project for $CLUSTER testing"
 email_address=$1
 user_id=$(cryosparcm cli "get_id_by_email('$email_address')")
 echo "User ID is: $user_id"
 
-project_container_dir=$2
-mkdir -p ${project_container_dir}
-project_title="Test workers on $CLUSTER"
-project_uid=$(cryosparcm cli "create_empty_project(owner_user_id='$user_id', project_container_dir='$project_container_dir', title='$project_title')")
-echo "Created project with UID: $project_uid"
+_header "Create a project"
+project_uid=$(get_project_id)
+if [[ "$project_uid" == "P"* ]]; then
+  echo "Found the project with UID: $project_uid"
+else
+  project_container_dir=$2
+  mkdir -p ${project_container_dir}
+  project_title="OSC test workers"
+  project_uid=$(cryosparcm cli "create_empty_project(owner_user_id='$user_id', project_container_dir='$project_container_dir', title='$project_title')")
+  echo "Created project with UID: $project_uid"
+fi
 
-_header "Test workers"
+_header "Test workers on $CLUSTER"
 cryosparcm test workers $project_uid --target $CLUSTER
