@@ -4,14 +4,16 @@ import json
 import argparse
 import os
 
-def update_cluster_configs(version, worker_bin_path=None, account=None):
+def update_cluster_configs(version, cluster, worker_bin_path=None, account=None):
     # Paths based on the repository structure
-    script_path = 'lanes/ascend/cluster_script.sh'
-    info_path = 'lanes/ascend/cluster_info.json'
+    script_path_tpl = f'lanes/{cluster}/cluster_script.sh.tpl'
+    info_path_tpl = f'lanes/{cluster}/cluster_info.json.tpl'
+    script_path = f'lanes/{cluster}/cluster_script.sh'
+    info_path = f'lanes/{cluster}/cluster_info.json'
 
     # Modify worker_bin_path in cluster_info.json
-    if os.path.exists(info_path):
-        with open(info_path, 'r') as f:
+    if os.path.exists(info_path_tpl):
+        with open(info_path_tpl, 'r') as f:
             data = json.load(f)
         
         # Update the specific key
@@ -27,8 +29,8 @@ def update_cluster_configs(version, worker_bin_path=None, account=None):
     if not account:
        return       
 
-    if os.path.exists(script_path):
-        with open(script_path, 'r') as f:
+    if os.path.exists(script_path_tpl):
+        with open(script_path_tpl, 'r') as f:
             content = f.read()
         
         # Replace the placeholder with the provided account value
@@ -46,6 +48,7 @@ if __name__ == "__main__":
     # Arguments for the features
     parser.add_argument("--version", required=True, help="The CryoSPARC version")
     parser.add_argument("--account", required=False, default=None, help="The CryoSPARC project account (e.g., PAS1234)")
+    parser.add_argument("--cluster", required=False, default=None, help="The cluster name (e,g. pitzer or ascend)")
     parser.add_argument("--worker-path", required=False, default=None, help="The absolute path to the cryosparcw binary")
 
     args = parser.parse_args()
@@ -53,4 +56,13 @@ if __name__ == "__main__":
     if not args.worker_path:
         args.worker_path = f"/apps/cryosparc-worker/{args.version}/bin/cryosparcw"
 
-    update_cluster_configs(args.version, args.worker_path, args.account)
+    clusters = ["pitzer", "ascend"]
+    if args.cluster:
+        if args.cluster not in clusters:
+            print(f"Error: {args.cluster} lane not found.")
+            os._exit(1)
+        else:
+            clusters = [args.cluster]
+
+    for cluster in clusters:
+        update_cluster_configs(args.version, cluster, args.worker_path, args.account)

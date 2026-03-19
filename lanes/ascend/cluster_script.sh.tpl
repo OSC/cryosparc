@@ -20,17 +20,12 @@
 ## {{ cryosparc_username }} - cryosparc username of the user that created the job (usually an email)
 ## {{ job_type }}           - cryosparc job type
 ##
-
-#### CryoSPARC cluster submission script variables
+## OSC customized variables
 ## {{ time }}               - time limit of the job (default: 60 minutes)
-## {{ ntasks_per_node }}    - number of tasks per node (default: 1 task)
-##                            Note: leave this value as default unless the
-##                            number of CPUs is insufficient or you need more
-##                            memory to complete the job. Increasing this value
-##                            will allocate more resources per job.
+## {{ mem_gb }}             - amount of memory needed in GB. (default: 4GB x {{ num_cpu }})
 
 #### What follows is a simple SLURM script:
-#SBATCH --cluster=pitzer
+#SBATCH --cluster=ascend
 #SBATCH --account={{ account }}
 #SBATCH --job-name=cryosparc_{{ project_uid }}_{{ job_uid }}
 #SBATCH --chdir={{ project_dir_abs }}
@@ -41,8 +36,8 @@
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task={{ num_cpu }}
 #SBATCH --ntasks-per-node={{ (ntasks_per_node|default(1)) }}
-{%- if ram_gb > 0 %}
-#SBATCH --mem={{ ram_gb }}gb
+{%- if mem_gb %}
+#SBATCH --mem={{ mem_gb|int }}gb
 {%- endif %}
 {%- if num_gpu > 0 %}
 #SBATCH --gpus-per-node={{ num_gpu }}
