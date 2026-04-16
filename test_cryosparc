@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -eE
+
 _header() {
   echo -e "\e[1;32m\n## $*\e[0m"
 }
@@ -32,6 +34,9 @@ if [[ -z "$EMAIL" ]] || [[ -z "$PROJECT_DIR" ]] || [[ -z "$CLUSTER" ]] ; then
   _help
 fi
 
+export TERM=linux
+cd /opt/cryosparc_master/run/
+
 _header "Test checklist"
 cryosparcm test install
 
@@ -52,5 +57,6 @@ else
 fi
 
 _header "Test workers on $CLUSTER"
-cryosparcm cli "set_cluster_configuration_custom_vars({'time': 60})"
+current_values=$(cryosparcm cli "get_cluster_configuration_custom_vars()" | tr -d '{}')
+cryosparcm cli "set_cluster_configuration_custom_vars({$current_values, 'time': 60})"
 cryosparcm test workers $project_uid --target $CLUSTER
