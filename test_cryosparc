@@ -52,4 +52,5 @@ else
 fi
 
 _header "Test workers on $CLUSTER"
+cryosparcm cli "set_cluster_configuration_custom_vars({'time': 60})"
 cryosparcm test workers $project_uid --target $CLUSTER
