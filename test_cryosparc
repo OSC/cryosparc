@@ -60,3 +60,4 @@ _header "Test workers on $CLUSTER"
 current_values=$(cryosparcm cli "get_cluster_configuration_custom_vars()" | tr -d '{}')
 cryosparcm cli "set_cluster_configuration_custom_vars({$current_values, 'time': 60})"
 cryosparcm test workers $project_uid --target $CLUSTER
+cryosparcm cli "set_cluster_configuration_custom_vars({$current_values})"
